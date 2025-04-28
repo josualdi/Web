@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Menú con Loader Microchip</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    #loader {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #loader i {
+      font-size: 60px;
+      color: #411175;
+      animation: girar 1.5s linear infinite;
+    }
+
+    @keyframes girar {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Fondo con microchips cayendo */
+    .background-icons {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .chip-icon {
+      position: absolute;
+      top: -40px;
+      font-size: 24px;
+      opacity: 0.7;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(110vh); opacity: 0; }
+    }
+
+    html, body {
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%; /* Asegura que el body ocupe toda la altura de la pantalla */
+      z-index: -1;
+    }
+    .menu {
+        overflow-y: auto;
+      list-style: none;
+      padding: 10px; /* Reducimos el padding */
+      width: 100%; /* Permite que ocupe el 90% del contenedor */
+      height: 100%;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(68, 0, 53, 0.2);
+      position: relative;
+      z-index: 1;
+      background-color: rgba(255, 255, 255, 0.7); /* Fondo semitransparente */
+    }
+
+    .menu-item {
+        background: rgba(249, 243, 248, 1);
+      border-radius: 10px;
+      margin: 10px 0;
+      padding: 15px 20px; /* Reducimos el padding para evitar el espacio extra */
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s, color 0.3s;
+      box-shadow: 0 4px 10px rgba(68, 0, 53, 0.2);
+    }
+
+    .menu-item:hover {
+      background: #411175;
+      color: white;
+      transform: scale(1.03);
+    }
+
+    .menu-item i {
+      font-size: 24px;
+      margin-right: 15px;
+      transition: color 0.3s ease;
+    }
+
+    .menu-item:hover i,
+    .menu-item:hover .menu-title {
+      color: #26bd78;
+    }
+
+    .menu-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu-title {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .menu-desc {
+      font-size: 1rem;
+      color: #73447f;
+    }
+
+    .menu-item:hover .menu-desc {
+      color: #f3f9f8;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .image {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      border-radius: 4px;
+      margin: 10px 0;
+      align-items: center;
+      transition: background-color 0.3s, color 0.3s;
+      box-shadow: 0 4px 10px rgba(68, 0, 53, 0.2);
+      background: rgba(249, 243, 248, 1);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .logo {
+        border-radius: 15px;
+        list-style: none;
+        width: 100%;
+
+    }
+
+    .logo img {
+       max-width: 100%;
+       height: auto;
+    }
+    .menu-bienvenida {
+      margin-left: 10px;
+      margin-bottom: 0px;
+    }
+    .bienvenida {
+      font-size: 17px;
+      margin: 0;
+      padding-right: 14px;
+    }
+    .hola {
+        font-size: 30px;
+      color: #411175;
+      font-weight: bold;
+    }
+  </style>
+  </head>
+  <body>
+
+    <!-- Loader con icono de microchip -->
+    <div id="loader"><i class="fas fa-microchip"></i></div>
+    
+    <!-- Fondo con microchips -->
+    <div class="background-icons"></div>
+    
+    <!-- Script para animaciones y loader -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Fondo animado
+        const container = document.querySelector('.background-icons');
+        const totalIcons = 100;
+        const colors = ['#411175', '#f3f9f8', '#26bd78'];
+    
+        for (let i = 0; i < totalIcons; i++) {
+          const icon = document.createElement('i');
+          icon.className = 'fas fa-microchip chip-icon';
+          const size = Math.random() * 20 + 7;
+          const delay = Math.random() * 10;
+          const duration = Math.random() * 5 + 10;
+    
+          icon.style.left = `${Math.random() * 100}vw`;
+          icon.style.fontSize = `${size}px`;
+          icon.style.animationDuration = `${duration}s`;
+          icon.style.animationDelay = `${delay}s`;
+          icon.style.opacity = `${Math.random() * 0.5 + 0.3}`;
+          icon.style.color = colors[Math.floor(Math.random() * colors.length)];
+    
+          container.appendChild(icon);
+        }
+    
+        // Loader al hacer clic en menú
+        document.querySelectorAll('.menu a').forEach(link => {
+          link.addEventListener('click', function(e) {
+            e.preventDefault(); // Detener navegación inmediata
+            const destino = this.getAttribute('href');
+            document.getElementById('loader').style.display = 'flex';
+            window.addEventListener("pageshow", () => {
+        document.getElementById('loader').style.display = 'none';
+      });
+    
+      document.addEventListener("appBack", () => {
+        document.getElementById('loader').style.display = 'none';
+      });
+            setTimeout(() => {
+              window.location.href = destino;
+            }, 1500); // 1.5 segundos de espera
+          });
+        });
+        window.addEventListener("pageshow", () => {
+        document.getElementById('loader').style.display = 'none';
+      });
+    
+      document.addEventListener("appBack", () => {
+        document.getElementById('loader').style.display = 'none';
+      });
+      });
+    </script>
+    <script>
+      // Ocultar loader si el usuario vuelve desde otra pantalla
+      window.addEventListener("pageshow", () => {
+        document.getElementById('loader').style.display = 'none';
+      });
+    
+      document.addEventListener("appBack", () => {
+        document.getElementById('loader').style.display = 'none';
+      });
+    </script>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const loader = document.getElementById("loader");
+    
+        document.querySelectorAll(".menu a").forEach(link => {
+          link.addEventListener("click", function(e) {
+            const destino = this.getAttribute("href");
+    
+            // ❌ Si es el enlace de “Mi cuenta” nativa, no hacer nada
+            if (destino === "/mi-cuenta") return;
+    
+            e.preventDefault(); // ⛔ Evita redirección automática
+    
+            // ⏳ Muestra loader
+            loader.style.display = "flex";
+    
+            // ⏱️ Espera y redirige manualmente
+            setTimeout(() => {
+              window.location.href = destino;
+            }, 1500);
+          });
+        });
+      });
+    </script>
+    <script>
+      window.addEventListener("load", () => {
+        const loader = document.getElementById("loader");
+        
+        // 👁️ Mostrar el loader al entrar
+        loader.style.display = "flex";
+    
+        // ⏳ Ocultarlo después de 1.5 segundos (puedes ajustar el tiempo)
+        setTimeout(() => {
+          loader.style.display = "none";
+        }, 1000);
+      });
+    </script>
+    <!-- Menú -->
+    <ul class="menu">
+        <div class="image">
+            <div class="logo">
+              <div style="display: flex; align-items: center;">
+                <img src="https://i.postimg.cc/KYHKZZZj/Para-Diego.png" width="130" length="130" style="border-radius: 10px; margin-right: 10px; padding: 10px;">
+                <p class="bienvenida"><span class="hola">Hola, </span>estamos encantados de tenerte con nosotros.<br>¡Juntos lograremos grandes cosas!</p>
+              </div>
+            </div>
+          </div>
+          <a href="/mi-cuenta">
+            <li class="menu-item">
+              <i class="fa-solid fa-users-gear"></i>
+              <div class="menu-text">
+                <div class="menu-title">Mi cuenta</div>
+                <div class="menu-desc">Inicio de sesión, Gestión de cuenta y Cerrar sesión.</div>
+              </div>
+            </li>
+          </a>
+          <a class="rs" href="Reservas" data-offline="false" data-params="value_id:297171" data-state="appointmentpro-home">
+            <li class="menu-item">
+              <i class="fa-solid fa-calendar-plus"></i>
+              <div class="menu-text">
+                <div class="menu-title">Reservas</div>
+                <div class="menu-desc">Realiza reservas, Gestionalas y Págalas.</div>
+              </div>
+            </li>
+          </a>
+        
+          <a class="htm" href="Hazlo-tu-mismo" data-offline="false" data-params="value_id:297181" data-state="sourcecode-view">
+            <li class="menu-item">
+              <i class="fa fa-info-circle" aria-hidden="true"></i>
+              <div class="menu-text">
+                <div class="menu-title">Hazlo tú mismo</div>
+                <div class="menu-desc">Lee nuestro manSual e infórmate sobre tu fallo.</div>
+              </div>
+            </li>
+          </a>
+        
+          <a class="as" href="Asesoria"  data-offline="false" data-params="value_id:298398" data-state="sourcecode-view">
+            <li class="menu-item">
+              <i class="fa-solid fa-question"></i>
+              <div class="menu-text">
+                <div class="menu-title">Asesoria</div>
+                <div class="menu-desc">Aqui podrás recibir ayuda para tener claro tus problemas.</div>
+              </div>
+            </li>
+          </a>
+        
+          <a class="cnt" href="Contacto" data-offline="true" data-params="value_id:297190" data-state="contact-view">
+            <li class="menu-item">
+              <i class="fa-solid fa-envelope"></i>
+              <div class="menu-text">
+                <div class="menu-title">Contacto</div>
+                <div class="menu-desc">¿Tienes dudas? Escríbenos aquí.</div>
+              </div>
+            </li>
+          </a>
+        
+    </ul>
+  </body>
